@@ -3,21 +3,27 @@ version: '3.8'
 services:
   app:
     build: .
+    ports:
+      - "8000:8000"
     depends_on:
       - redis
+    env_file: .env 
     environment:
       - ALLOW_ORIGINS
       - OPENAI_API_KEY
       - MODEL
       - EMBEDDING_MODEL
       - EMBEDDING_DIMENSIONS
-      - REDIS_HOST
+      - REDIS_HOST=redis
       - REDIS_PORT
       - DOCS_DIR
       - EXPORT_DIR
 
   redis:
     image: redis/redis-stack-server:latest
+    ports:
+      - "6379:6379"         # 👈 expose Redis to host
+      - "8001:8001" 
     volumes:
       - redis_data:/data
     environment:
